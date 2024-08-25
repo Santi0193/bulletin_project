@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Bulletin
+{% endblock title %}
+
+{% block content %}
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+<h1>
+    {{ post.heading }}
+</h1>
+<p>
+    {{ post.text|safe }}
+</p>
+<h2>Отклики</h2>
+{% if comments %}
+        <table>
+            <tr>
+                <td><strong>Текст</strong></td>
+                <td><strong>Автор</strong></td>
+                <td><strong>Статус</strong></td>
+                <td><strong>Дата и время</strong></td>
+            </tr>
+             {% for comment in comments %}
+            <tr>
+                <td>{{ comment.text }}</td>
+                <td>{{ comment.user }}</td>
+                {% if comment.status == True %}
+                    <td >✔️</td>
+                {% else %}
+                    <td>❌</td>
+                {% endif %}
+                <td>{{ comment.created_at|date:'d.m.Y H:m:s' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+{% else %}
+    <p>Пока никто не оставил отклик</p>
+{% endif %}
+{% if user.is_authenticated%}
+    <br>
+    {% if user.id != post.author_id %}
+    <a href="{% url 'comment_create' post.id %}">Оставить отклик</a>
+    {% endif %}
+{% else %}
+    <br>
+    <p>Чтобы оставить отклик зарегистрируйтесь или войдите в аккаунт</p>
+{% endif %}
+<p>
+    <a href="{% url 'posts' %}">Назад</a>
+</p>
+{% endblock content %}

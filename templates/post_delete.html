@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+<h1>Удаление отклика</h1>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    <h3>Вы действительно хотите удалить: </h3>
+     <table>
+            <tr>
+                <td><strong>Заголовок</strong></td>
+                <td><strong>Текст</strong></td>
+            </tr>
+        <tr>
+            <td>{{ object.heading }}</td>
+            <td>{{ object.text|safe }}</td>
+        </tr>
+ </table>
+    <br>
+    <input type="submit" value="Delete" />
+</form>
+<br>
+<a href="{% url 'posts' %}">Отмена</a>
+{% endblock content %}

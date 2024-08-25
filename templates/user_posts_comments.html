@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Bulletins
+{% endblock title %}
+
+{% block content %}
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
+<h2>Ваши объявления</h2>
+<hr>
+<form action="" method="get">
+    {{ filterset.form.as_p }}
+    <br>
+    <input type="submit" value="Применить">
+</form>
+<hr>
+<h4>Отклики к выбранному объявлению:</h4>
+{% if comments %}
+ <table>
+            <tr>
+                <td><strong>Текст</strong></td>
+                <td><strong>Автор</strong></td>
+                <td><strong>Статус</strong></td>
+                <td><strong>Дата и время</strong></td>
+                <td><strong>Действия</strong></td>
+            </tr>
+     {% for comment in comments %}
+        <tr>
+            <td>{{ comment.text }}</td>
+            <td>{{ comment.user }}</td>
+            {% if comment.status == True %}
+                <td >✔️</td>
+            {% else %}
+                <td>❌</td>
+            {% endif %}
+            <td>{{ comment.created_at|date:'d.m.Y H:m:s' }}</td>
+            <td><a href="{% url 'review_delete' comment.id %}"> Удалить</a>
+                <a href="{% url 'review_accept' comment.id %}">Принять или отклонить отклик</a>
+            </td>
+        </tr>
+    {% endfor %}
+ </table>
+<br>
+<button><a href="{% url 'reviews_list' %}">Сбросить фильтр</a></button>
+{% else %}
+<p>Откликов нет или фильтр не выбран</p>
+{% endif %}
+{% endblock%}
